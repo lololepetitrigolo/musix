@@ -1,30 +1,6 @@
+import { Client, Databases, Query } from 'node-appwrite';
 import { getStaticFile, interpolate, throwIfMissing } from './utils.js';
 import { MeiliSearch } from 'meilisearch';
-import {
-  Client,
-  Databases,
-  Query,
-} from "react-native-appwrite";
-
-export const appwriteConfig = {
-  endpoint: "https://ef7c-37-165-164-237.ngrok-free.app/v1",
-  platform: "com.lolo.musix",
-  projectId: "66589d630000a9fbb710",
-  storageId: "6658a4a8000adeb74291",
-  databaseId: "6658a0760030ec7e3bb4",
-  userCollectionId: "6658a0a80013e2717401",
-  musicCollectionId: "6658a0c700292cade378",
-  playlistCollectionId: "665b54640037f32cf7b7",
-};
-
-const client = new Client();
-
-client
-  .setEndpoint(appwriteConfig.endpoint)
-  .setProject(appwriteConfig.projectId)
-  .setPlatform(appwriteConfig.platform);
-
-const databases = new Databases(client);
 
 export default async ({ req, res, log }) => {
   throwIfMissing(process.env, [
@@ -47,12 +23,21 @@ export default async ({ req, res, log }) => {
     return res.send(html, 200, { 'Content-Type': 'text/html; charset=utf-8' });
   }
 
+  const client = new Client()
+    .setEndpoint(
+      process.env.APPWRITE_ENDPOINT ?? 'https://cloud.appwrite.io/v1'
+    )
+    .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
+    .setKey(process.env.APPWRITE_API_KEY);
+
+  const databases = new Databases(client);
+
   const meilisearch = new MeiliSearch({
-    host: "http://localhost:7700",
-    apiKey: "meilisearchKey",
+    host: process.env.MEILISEARCH_ENDPOINT,
+    apiKey: process.env.MEILISEARCH_ADMIN_API_KEY,
   });
 
-  const index = meilisearch.index("sound");
+  const index = meilisearch.index(process.env.MEILISEARCH_INDEX_NAME);
 
   let cursor = null;
 
@@ -64,8 +49,8 @@ export default async ({ req, res, log }) => {
     }
 
     const { documents } = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.musicCollectionId,
+      process.env.APPWRITE_DATABASE_ID,
+      process.env.APPWRITE_COLLECTION_ID,
       queries
     );
 
