@@ -3,16 +3,15 @@ import { getStaticFile, interpolate, throwIfMissing } from './utils.js';
 import { MeiliSearch } from 'meilisearch';
 
 export default async ({ req, res, log }) => {
-  // throwIfMissing(process.env, [
-  //   'APPWRITE_API_KEY',
-  //   'APPWRITE_DATABASE_ID',
-  //   'APPWRITE_COLLECTION_ID',
-  //   'MEILISEARCH_ENDPOINT',
-  //   'MEILISEARCH_INDEX_NAME',
-  //   'MEILISEARCH_ADMIN_API_KEY',
-  //   'MEILISEARCH_SEARCH_API_KEY',
-  // ]);
-  context.log("Yo je me lance");
+  throwIfMissing(process.env, [
+    'APPWRITE_API_KEY',
+    'APPWRITE_DATABASE_ID',
+    'APPWRITE_COLLECTION_ID',
+    'MEILISEARCH_ENDPOINT',
+    'MEILISEARCH_INDEX_NAME',
+    'MEILISEARCH_ADMIN_API_KEY',
+    'MEILISEARCH_SEARCH_API_KEY',
+  ]);
 
   if (req.method === 'GET') {
     const html = interpolate(getStaticFile('index.html'), {
@@ -58,16 +57,16 @@ export default async ({ req, res, log }) => {
     if (documents.length > 0) {
       cursor = documents[documents.length - 1].$id;
     } else {
-      context.log(`No more documents found.`);
+      log(`No more documents found.`);
       cursor = null;
       break;
     }
 
-    context.log(`Syncing chunk of ${documents.length} documents ...`);
+    log(`Syncing chunk of ${documents.length} documents ...`);
     await index.addDocuments(documents, { primaryKey: '$id' });
   } while (cursor !== null);
 
-  context.log('Sync finished.');
+  log('Sync finished.');
 
   return res.send('Sync finished.', 200);
 };
