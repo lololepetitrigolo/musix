@@ -16,6 +16,13 @@ export interface SoundInfo {
   title: string;
   music: string;
 }
+export interface PlaylistInfo {
+  id: string;
+  cover: string;
+  creator: string;
+  title: string;
+  musics: SoundInfo[];
+}
 
 export interface GlobalContextType {
   sound: Audio.Sound | null;
@@ -23,6 +30,7 @@ export interface GlobalContextType {
   soundTrack: React.MutableRefObject<{
     currentSoundindex: number;
     sounds: SoundInfo[];
+    currentPlaylistId: string | undefined;
   }>;
   isPlaying: boolean;
   setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,7 +69,8 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
   const soundTrack = useRef<{
     currentSoundindex: number;
     sounds: SoundInfo[];
-  }>({ currentSoundindex: -1, sounds: [] });
+    currentPlaylistId: string | undefined;
+  }>({ currentSoundindex: -1, sounds: [], currentPlaylistId: undefined });
 
   const onPlaybackStatusUpdate = (playbackStatus: AVPlaybackStatus) => {
     if (!playbackStatus.isLoaded) {
@@ -128,6 +137,7 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
       soundTrack.current = {
         currentSoundindex: newTrackIndex,
         sounds: soundTrack.current.sounds,
+        currentPlaylistId: soundTrack.current.currentPlaylistId,
       };
     }
   }
@@ -141,6 +151,7 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
       soundTrack.current = {
         currentSoundindex: newTrackIndex,
         sounds: soundTrack.current.sounds,
+        currentPlaylistId: soundTrack.current.currentPlaylistId,
       };
     } else {
       setPlayingTime(0);

@@ -9,6 +9,10 @@ import eyeHide from "../assets/icons/eyehide.png"
 import downArrow from "../assets/icons/downarrow.png"
 import next from "../assets/icons/next.png"
 import previous from "../assets/icons/previous.png"
+import liked from "../assets/icons/liked.png"
+import notliked from "../assets/icons/notliked.png"
+import add from "../assets/icons/add.png"
+import check from "../assets/icons/check.png"
 
 export default {
   home,
@@ -21,5 +25,9 @@ export default {
   eyeHide,
   downArrow,
   next,
-  previous
+  previous, 
+  liked, 
+  notliked, 
+  add, 
+  check,
 };

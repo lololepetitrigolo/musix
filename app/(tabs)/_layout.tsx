@@ -63,7 +63,7 @@ const TabLayout = () => {
 
   if (pathname == "home") headerText = user?.username;
   else if (pathname == "search") headerText = "Recherche";
-  else if (pathname == "library") headerText = "Vos musiques favorites";
+  else if (pathname == "library") headerText = "Vos musiques";
   else if (pathname == "profile") headerText = "Votre profile";
 
   return (

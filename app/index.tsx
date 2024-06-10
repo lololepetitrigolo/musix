@@ -1,6 +1,7 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { router } from "expo-router";
 import { Text, TouchableOpacity } from "react-native";
+import "react-native-url-polyfill/auto";
 
 export default function Index() {
   const { isLogged, user } = useGlobalContext();

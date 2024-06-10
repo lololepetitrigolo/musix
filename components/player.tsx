@@ -21,7 +21,7 @@ const Player = () => {
     <TouchableOpacity
       className="bg-slate-800 ml-1 mr-1 rounded-lg"
       onPress={() => {
-        router.replace("/music");
+        router.push("/music");
       }}
     >
       <View className="flex-row justify-between w-full">

@@ -1,3 +1,4 @@
+import { Recording } from "expo-av/build/Audio";
 import {
   Account,
   Avatars,
@@ -10,9 +11,9 @@ import {
 } from "react-native-appwrite";
 
 export const appwriteConfig = {
-  endpoint: "http:localhost:80/v1",
+  endpoint: "http://88.177.237.235:35080/v1",
   platform: "com.lolo.musix",
-  projectId: "66589d630000a9fbb710",
+  projectId: "6660984e000818458191",
   storageId: "6658a4a8000adeb74291",
   databaseId: "6658a0760030ec7e3bb4",
   userCollectionId: "6658a0a80013e2717401",
@@ -165,10 +166,10 @@ export async function updateRecentListentMusic(
   soundId: string
 ) {
   try {
-    user?.recentSound.splice(user?.recentSound.indexOf(soundId), 1);
+    const index = user?.recentSound.indexOf(soundId);
+    if (index != -1) user?.recentSound.splice(index, 1);
     user?.recentSound.unshift(soundId);
-    const recentSound = [...new Set(user?.recentSound)];
-
+    const recentSound = user?.recentSound;
     const data = { recentSound };
     if (!user?.$id) throw new Error("user id is undefined");
     const result = await databases.updateDocument(
@@ -201,5 +202,118 @@ export async function getRecentListeningMusic(user: Models.Document) {
   } catch (error) {
     console.log(error);
     throw new Error("error while fetching new music");
+  }
+}
+
+export async function likeSound(user: Models.Document, id: string) {
+  try {
+    user?.likedSound.unshift(id);
+    const likedSound = user?.likedSound;
+    const data = { likedSound };
+    if (!user?.$id) throw new Error("user id is undefined");
+    const result = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      user?.$id,
+      data
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error("error while liking a sound");
+  }
+}
+
+export async function unlikeSound(user: Models.Document, id: string) {
+  try {
+    user?.likedSound.splice(user?.likedSound.indexOf(id), 1);
+
+    const likedSound = user?.likedSound;
+    const data = { likedSound };
+    if (!user?.$id) throw new Error("user id is undefined");
+    const result = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      user?.$id,
+      data
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error("error while unliking a sound");
+  }
+}
+
+export async function getLikedSoundInfo(user: Models.Document) {
+  try {
+    const ids = user?.likedSound;
+    let musics: Models.Document[] = [];
+    for (const id of ids) {
+      const music = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.musicCollectionId,
+        [Query.equal("$id", id)]
+      );
+      musics.push(music.documents[0]);
+    }
+
+    return musics;
+  } catch (error) {
+    console.log(error);
+    throw new Error("error while fetching favorites music");
+  }
+}
+export async function likePlaylist(user: Models.Document, id: string) {
+  try {
+    user?.likedPlaylist.unshift(id);
+    const likedPlaylist = user?.likedPlaylist;
+    const data = { likedPlaylist };
+    if (!user?.$id) throw new Error("user id is undefined");
+    const result = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      user?.$id,
+      data
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error("error while liking a sound");
+  }
+}
+
+export async function unlikePlaylist(user: Models.Document, id: string) {
+  try {
+    user?.likedPlaylist.splice(user?.likedPlaylist.indexOf(id), 1);
+
+    const likedPlaylist = user?.likedPlaylist;
+    const data = { likedPlaylist };
+    if (!user?.$id) throw new Error("user id is undefined");
+    const result = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      user?.$id,
+      data
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error("error while unliking a sound");
+  }
+}
+
+export async function getLikedPlaylistInfo(user: Models.Document) {
+  try {
+    const ids = user?.likedPlaylist;
+    let playlists: Models.Document[] = [];
+    for (const id of ids) {
+      const playlist = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.playlistCollectionId,
+        [Query.equal("$id", id)]
+      );
+      playlists.push(playlist.documents[0]);
+    }
+
+    return playlists;
+  } catch (error) {
+    console.log(error);
+    throw new Error("error while fetching favorites music");
   }
 }

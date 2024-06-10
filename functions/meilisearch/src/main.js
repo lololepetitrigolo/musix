@@ -33,7 +33,7 @@ export default async ({ req, res, log }) => {
   const databases = new Databases(client);
 
   const meilisearch = new MeiliSearch({
-    host: "http://localhost:7700",
+    host: "http://[::1]:7700",
     apiKey: "meilisearchKey",
   });
 

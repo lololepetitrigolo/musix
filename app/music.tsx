@@ -6,6 +6,7 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { router } from "expo-router";
 import { vw } from "react-native-expo-viewport-units";
 import { Slider } from "@miblanchard/react-native-slider";
+import { likeSound, unlikeSound } from "@/lib/appwrite";
 
 const Music = () => {
   const {
@@ -17,9 +18,16 @@ const Music = () => {
     nextTrack,
     previousTrack,
     shouldUpdatePlayingTime,
+    user,
   } = useGlobalContext();
 
   const [value, setValue] = useState(0);
+
+  const [isCurrentSoundLiked, setIsCurrentSoundLiked] = useState(
+    user?.likedSound.includes(
+      soundTrack.current.sounds[soundTrack.current.currentSoundindex]?.id
+    )
+  );
 
   return (
     <View className="h-full bg-slate-800">
@@ -27,7 +35,7 @@ const Music = () => {
         <View className="p-3">
           <TouchableOpacity
             onPress={() => {
-              router.replace("/home");
+              router.back();
             }}
           >
             <Image
@@ -49,18 +57,50 @@ const Music = () => {
                 ]?.cover,
               }}
             />
-            <Text className="mt-1 mb-1 ml-2 w-full text-xl text-slate-100 font-semibold overflow-hidden whitespace-nowrap">
-              {
-                soundTrack.current.sounds[soundTrack.current.currentSoundindex]
-                  ?.title
-              }
-            </Text>
-            <Text className="mt-auto mb-auto ml-2 w-ful text-md text-slate-300 font-light overflow-hidden whitespace-nowrap">
-              {
-                soundTrack.current.sounds[soundTrack.current.currentSoundindex]
-                  ?.author
-              }
-            </Text>
+            <View className="flex flex-row">
+              <View className="flex">
+                <Text className="mt-1 mb-1 ml-2 w-full text-xl text-slate-100 font-semibold overflow-hidden whitespace-nowrap">
+                  {
+                    soundTrack.current.sounds[
+                      soundTrack.current.currentSoundindex
+                    ]?.title
+                  }
+                </Text>
+                <Text className="mt-auto mb-auto ml-2 w-ful text-md text-slate-300 font-light overflow-hidden whitespace-nowrap">
+                  {
+                    soundTrack.current.sounds[
+                      soundTrack.current.currentSoundindex
+                    ]?.author
+                  }
+                </Text>
+              </View>
+              <TouchableOpacity
+                className="ml-auto"
+                onPress={async () => {
+                  if (user) {
+                    setIsCurrentSoundLiked((b: boolean) => !b);
+                    !isCurrentSoundLiked
+                      ? await likeSound(
+                          user,
+                          soundTrack.current.sounds[
+                            soundTrack.current.currentSoundindex
+                          ]?.id
+                        )
+                      : await unlikeSound(
+                          user,
+                          soundTrack.current.sounds[
+                            soundTrack.current.currentSoundindex
+                          ]?.id
+                        );
+                  }
+                }}
+              >
+                <Image
+                  className="w-8 h-8 mt-auto mb-auto ml-auto"
+                  source={isCurrentSoundLiked ? icons.liked : icons.notliked}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <View className="flex ml-auto mr-auto w-11/12">
             <Slider
