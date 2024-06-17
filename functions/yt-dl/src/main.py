@@ -28,7 +28,6 @@ ydl_opts = {
             "preferredquality": "192",
         }
     ],
-    "ffmpeg_location": "usr/bin/ffmpeg",
 }
 
 
