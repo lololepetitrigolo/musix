@@ -1,2 +1,3 @@
 appwrite
+ffmpeg
 youtube-dl
