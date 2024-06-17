@@ -1,0 +1,15 @@
+name: Deploy Appwrite Functions
+on: workflow_dispatch
+jobs:
+  deploy-functions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Python
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      - run: npm install -g appwrite-cli
+      - run: appwrite -v
+      - run: appwrite client --endpoint ${{ vars.APPWRITE_URL }} --projectId ${{ vars.APPWRITE_PROJECT_ID }} --key ${{ secrets.APPWRITE_API_KEY }}
+      - run: appwrite deploy function --all --yes
