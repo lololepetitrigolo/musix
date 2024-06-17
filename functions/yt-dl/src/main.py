@@ -28,6 +28,7 @@ ydl_opts = {
             "preferredquality": "192",
         }
     ],
+    "ffmpeg_location": "usr/bin/ffmpeg",
 }
 
 
@@ -158,7 +159,7 @@ def main(context):
     try:
         filenames = download(url)
     except Exception as e:
-        context.error("Failed to create document: " + e.message)
+        context.error("Failed to create document: " + e)
         return context.response.send("Failed to download")
 
     context.log("Download finsh")
