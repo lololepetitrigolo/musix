@@ -62,7 +62,8 @@ const TabLayout = () => {
   let headerText: string = "";
 
   if (pathname == "home") headerText = user?.username;
-  else if (pathname == "search") headerText = "Recherche";
+  else if (pathname == "search" || pathname == "youtube")
+    headerText = "Recherche";
   else if (pathname == "library") headerText = "Vos musiques";
   else if (pathname == "profile") headerText = "Votre profile";
 
@@ -84,6 +85,16 @@ const TabLayout = () => {
           <Text className="text-white mt-auto mb-auto text-3xl font-bold">
             {headerText}
           </Text>
+          <TouchableOpacity
+            className="ml-auto mt-auto mb-auto mr-2"
+            onPress={() => {}}
+          >
+            <Image
+              className="w-8 h-8"
+              tintColor={"#f1f5f9"}
+              source={icons.downloads}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <Slot />

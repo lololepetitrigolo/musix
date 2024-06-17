@@ -6,17 +6,25 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
+import { vw, vh } from "react-native-expo-viewport-units";
+import { Models } from "react-native-appwrite";
+import Animated, {
+  useSharedValue,
+  withRepeat,
+  Easing,
+  withTiming,
+  withSequence,
+} from "react-native-reanimated";
+
+import icons from "@/constants/icons";
+import { likePlaylist, unlikePlaylist } from "@/lib/appwrite";
 import {
   PlaylistInfo,
   useGlobalContext,
   SoundInfo,
 } from "@/context/GlobalProvider";
-import { vw, vh } from "react-native-expo-viewport-units";
-import { Models } from "react-native-appwrite";
-import icons from "@/constants/icons";
-import { likePlaylist, unlikePlaylist } from "@/lib/appwrite";
 
 const Playlist = () => {
   const { user, soundTrack, unLoadLoadAndPlaySound, toggleSound, isPlaying } =
@@ -32,7 +40,7 @@ const Playlist = () => {
     musics: JSON.parse(playlistArg.musics as string).map(
       (music: Models.Document) => {
         return {
-          id: music.$id,
+          id: music.id,
           title: music.title,
           cover: music.cover,
           author: music.author,
@@ -42,12 +50,126 @@ const Playlist = () => {
     ) as SoundInfo[],
   };
 
+  const maxHeight = 16;
+  const height = useSharedValue(0);
+
+  useEffect(() => {
+    height.value = isPlaying
+      ? withRepeat(
+          withSequence(
+            withTiming(maxHeight, {
+              duration: 250,
+              easing: Easing.linear,
+            }),
+            withTiming(maxHeight / 3, {
+              duration: 450,
+              easing: Easing.linear,
+            }),
+            withTiming(maxHeight, {
+              duration: 200,
+              easing: Easing.linear,
+            }),
+            withTiming(0, {
+              duration: 550,
+              easing: Easing.linear,
+            })
+          ),
+          -1,
+          true
+        )
+      : withTiming(5, {
+          duration: 400,
+          easing: Easing.inOut(Easing.quad),
+        });
+  }, [isPlaying]);
+
+  const height2 = useSharedValue(0);
+
+  useEffect(() => {
+    height2.value = isPlaying
+      ? withRepeat(
+          withSequence(
+            withTiming(maxHeight / 2, {
+              duration: 150,
+              easing: Easing.linear,
+            }),
+            withTiming(0, {
+              duration: 400,
+              easing: Easing.linear,
+            }),
+            withTiming(maxHeight, {
+              duration: 250,
+              easing: Easing.linear,
+            }),
+            withTiming(0, {
+              duration: 500,
+              easing: Easing.linear,
+            })
+          ),
+          -1,
+          true
+        )
+      : withTiming(5, {
+          duration: 400,
+          easing: Easing.inOut(Easing.quad),
+        });
+  }, [isPlaying]);
+
+  const height3 = useSharedValue(0);
+
+  useEffect(() => {
+    height3.value = isPlaying
+      ? withRepeat(
+          withSequence(
+            withTiming((maxHeight * 3) / 4, {
+              duration: 100,
+              easing: Easing.linear,
+            }),
+            withTiming(maxHeight / 3, {
+              duration: 300,
+              easing: Easing.linear,
+            }),
+            withTiming(maxHeight, {
+              duration: 200,
+              easing: Easing.linear,
+            }),
+            withTiming(0, {
+              duration: 500,
+              easing: Easing.linear,
+            })
+          ),
+          -1,
+          true
+        )
+      : withTiming(5, {
+          duration: 400,
+          easing: Easing.inOut(Easing.quad),
+        });
+  }, [isPlaying]);
   const renderPlaying = (index: number) => {
     if (
       soundTrack.current.currentPlaylistId == playlist.id &&
       soundTrack.current.currentSoundindex == index
     ) {
-      return <Text className="text-slate-100">YO</Text>;
+      return (
+        <View
+          className="mt-auto mb-auto flex-row-reverse items-end"
+          style={{ height: maxHeight }}
+        >
+          <Animated.View
+            className="w-1 bg-green-200 ml-1"
+            style={{ height: height }}
+          />
+          <Animated.View
+            className="w-1 bg-green-200"
+            style={{ height: height2 }}
+          />
+          <Animated.View
+            className="w-1 bg-green-200 mr-1"
+            style={{ height: height3 }}
+          />
+        </View>
+      );
     } else {
       null;
     }
@@ -109,36 +231,38 @@ const Playlist = () => {
               </Text>
             </View>
 
-            {renderAdd()}
-            <TouchableOpacity
-              className="ml-auto"
-              onPress={() => {
-                if (playlist.id != soundTrack.current.currentPlaylistId) {
-                  soundTrack.current = {
-                    currentSoundindex: 0,
-                    sounds: playlist.musics,
-                    currentPlaylistId: playlist.id,
-                  };
-                  unLoadLoadAndPlaySound({
-                    uri: playlist.musics[0].music,
-                  });
-                } else {
-                  toggleSound();
-                }
-              }}
-            >
-              <Image
-                source={
-                  isPlaying &&
-                  soundTrack.current.currentPlaylistId == playlist.id
-                    ? icons.pause
-                    : icons.play
-                }
-                resizeMode="contain"
-                className="w-6 h-6 mt-auto mb-auto mr-2"
-                tintColor={"#FFFFFF"}
-              ></Image>
-            </TouchableOpacity>
+            <View className=" flex flex-row ml-auto w-1/3 justify-between">
+              {renderAdd()}
+              <TouchableOpacity
+                className="ml-auto"
+                onPress={() => {
+                  if (playlist.id != soundTrack.current.currentPlaylistId) {
+                    soundTrack.current = {
+                      currentSoundindex: 0,
+                      sounds: playlist.musics,
+                      currentPlaylistId: playlist.id,
+                    };
+                    unLoadLoadAndPlaySound({
+                      uri: playlist.musics[0].music,
+                    });
+                  } else {
+                    toggleSound();
+                  }
+                }}
+              >
+                <Image
+                  source={
+                    isPlaying &&
+                    soundTrack.current.currentPlaylistId == playlist.id
+                      ? icons.pause
+                      : icons.play
+                  }
+                  resizeMode="contain"
+                  className="w-6 h-6 mt-auto mb-auto mr-2"
+                  tintColor={"#FFFFFF"}
+                ></Image>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -163,9 +287,17 @@ const Playlist = () => {
 
                 <View className="flex flex-row">
                   <View className="flex">
-                    <Text className="mt-auto ml-2 w-full text-lg text-white font-semibold overflow-hidden whitespace-nowrap">
+                    <Text
+                      className={`mt-auto ml-2 w-full text-lg font-semibold overflow-hidden whitespace-nowrap ${
+                        soundTrack.current.currentPlaylistId == playlist.id &&
+                        soundTrack.current.currentSoundindex == index
+                          ? "text-green-200"
+                          : "text-slate-300"
+                      }`}
+                    >
                       {title}
                     </Text>
+
                     <Text className="w-full text-slate-300 ml-2 mb-auto font-light overflow-hidden whitespace-nowrap">
                       {author}
                     </Text>

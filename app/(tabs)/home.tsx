@@ -85,7 +85,15 @@ const home = () => {
                 key={index}
                 cover={playlist.cover}
                 title={playlist.name}
-                musics={playlist.music}
+                musics={playlist.music.map((music: Models.Document) => {
+                  return {
+                    title: music.title,
+                    author: music.author,
+                    cover: music.cover,
+                    id: music.$id,
+                    music: music.music,
+                  };
+                })}
                 creator={playlist.creator}
                 id={playlist.$id}
               />

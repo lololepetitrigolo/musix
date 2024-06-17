@@ -1,6 +1,6 @@
 import { Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
-import { PlaylistInfo, useGlobalContext } from "@/context/GlobalProvider";
+import { PlaylistInfo } from "@/context/GlobalProvider";
 import { router } from "expo-router";
 
 const PlaylistCover: React.FC<PlaylistInfo> = (playlistInfo) => {

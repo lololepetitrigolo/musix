@@ -9,6 +9,7 @@ const BigCover: React.FC<SoundInfo> = ({ cover, title, author, music, id }) => {
       className="flex flex-column w-32 m-2"
       onPress={() => {
         soundTrack.current = {
+          currentPlaylistId: undefined,
           currentSoundindex: 0,
           sounds: [{ cover, title, author, music, id }],
         };

@@ -166,13 +166,14 @@ export async function updateRecentListentMusic(
   soundId: string
 ) {
   try {
+    console.log(soundId);
     const index = user?.recentSound.indexOf(soundId);
     if (index != -1) user?.recentSound.splice(index, 1);
     user?.recentSound.unshift(soundId);
     const recentSound = user?.recentSound;
     const data = { recentSound };
     if (!user?.$id) throw new Error("user id is undefined");
-    const result = await databases.updateDocument(
+    await databases.updateDocument(
       appwriteConfig.databaseId,
       appwriteConfig.userCollectionId,
       user?.$id,
@@ -315,5 +316,24 @@ export async function getLikedPlaylistInfo(user: Models.Document) {
   } catch (error) {
     console.log(error);
     throw new Error("error while fetching favorites music");
+  }
+}
+
+export async function getPlaylist(ids: string[]) {
+  try {
+    let playlists: Models.Document[] = [];
+    for (const id of ids) {
+      const playlist = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.playlistCollectionId,
+        [Query.equal("$id", id)]
+      );
+      playlists.push(playlist.documents[0]);
+    }
+
+    return playlists;
+  } catch (error) {
+    console.log(error);
+    throw new Error("error while fetching playlist");
   }
 }

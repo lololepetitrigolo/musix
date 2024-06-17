@@ -13,6 +13,7 @@ import liked from "../assets/icons/liked.png"
 import notliked from "../assets/icons/notliked.png"
 import add from "../assets/icons/add.png"
 import check from "../assets/icons/check.png"
+import downloads from "../assets/icons/downloads.png"
 
 export default {
   home,
@@ -30,4 +31,5 @@ export default {
   notliked, 
   add, 
   check,
+  downloads
 };

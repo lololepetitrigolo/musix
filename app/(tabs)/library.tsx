@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import LibraryCover from "@/components/libraryCover";
-import { useGlobalContext } from "@/context/GlobalProvider";
+import { SoundInfo, useGlobalContext } from "@/context/GlobalProvider";
 import useAppwrite from "@/lib/useAppwrite";
 import { getLikedPlaylistInfo, getLikedSoundInfo } from "@/lib/appwrite";
 import { router } from "expo-router";
@@ -33,7 +33,7 @@ const library = () => {
       <TouchableOpacity
         className="flex flex-row m-2"
         onPress={() => {
-          const sounds = likedSoundInfo.map((music) => {
+          const sounds: SoundInfo[] = likedSoundInfo.map((music) => {
             return {
               title: music.title,
               author: music.author,
@@ -71,7 +71,15 @@ const library = () => {
             key={index}
             cover={playlist.cover}
             title={playlist.name}
-            musics={playlist.music}
+            musics={playlist.music.map((music: Models.Document) => {
+              return {
+                title: music.title,
+                author: music.author,
+                cover: music.cover,
+                id: music.$id,
+                music: music.music,
+              };
+            })}
             creator={playlist.creator}
             id={playlist.$id}
           />

@@ -18,6 +18,7 @@ const LittleCover: React.FC<SoundInfo> = ({
       style={{ width: vw(46) }}
       onPress={() => {
         soundTrack.current = {
+          currentPlaylistId: undefined,
           currentSoundindex: 0,
           sounds: [{ cover, title, author, music, id }],
         };
