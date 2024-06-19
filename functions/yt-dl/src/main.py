@@ -28,7 +28,7 @@ ydl_opts = {
             "preferredquality": "192",
         }
     ],
-    "ffmpeg_location": "/usr/local/server/src/function/runtime-env/bin/ffmpeg",
+    "ffmpeg_location": "./bin/ffmpeg",
 }
 
 
