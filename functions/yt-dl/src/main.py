@@ -42,7 +42,7 @@ class FilenameCollectorPP(youtube_dl.postprocessor.common.PostProcessor):
         self.info.append(
             [information["title"], information["uploader"], information["album"]]
         )
-        self.filenames.append(information["filepath"][::-4])
+        self.filenames.append(information["filepath"][7:-4])
         return [], information
 
 
