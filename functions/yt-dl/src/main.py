@@ -157,7 +157,7 @@ def import_to_appwrite(context, filenames, infos):
                 storage,
                 f"/usr/local/server/musics/{file}.mp3",
             )
-            musics_id.append(music["$id"])
+            musics_id.append(music)
 
             cover = add_file(
                 context,
