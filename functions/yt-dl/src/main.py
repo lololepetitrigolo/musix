@@ -163,7 +163,7 @@ def import_to_appwrite(context, filenames, infos):
             if not album_cover:
                 album_cover = cover
 
-            info = info[i]
+            info = infos[i]
 
             add_music(context, databases, info[2], info[1], music, cover)
         info = infos[0]
