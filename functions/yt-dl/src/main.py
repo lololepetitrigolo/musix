@@ -114,6 +114,7 @@ def add_playlist(context, databases, name, creator, musics_id, cover):
 
 
 def import_to_appwrite(context, filenames):
+    context.log(filenames)
     client = (
         Client()
         .set_endpoint(APPWRITE_API_ENDPOINT)
