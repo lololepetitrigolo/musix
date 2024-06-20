@@ -55,8 +55,11 @@ def download(url):
 def sanitize_filename(filename):
     new_filename = ""
     for c in filename:
-        new_filename += "\\" + c
-    return new_filename
+        if c == " ":
+            new_filename += "\ "
+        else:
+            new_filename += c
+    return str(new_filename)
 
 
 def add_file(context, storage, filepath):
