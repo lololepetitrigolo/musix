@@ -192,3 +192,5 @@ def main(context):
     import_to_appwrite(context, filenames, infos)
 
     context.log("Imported to databases")
+
+    return context.res.empty()
