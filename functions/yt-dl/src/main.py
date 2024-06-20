@@ -81,7 +81,7 @@ def get_url(file):
 
 def add_music(context, databases, title, author, cover, music):
     try:
-        databases.create_document(
+        res = databases.create_document(
             database_id=APPWRITE_DATABASES_ID,
             collection_id=APPWRITE_MUSIC_COLLECTION_ID,
             document_id=ID.unique(),
@@ -92,6 +92,7 @@ def add_music(context, databases, title, author, cover, music):
                 "music": get_url(music),
             },
         )
+        return res
     except Exception as e:
         context.error("Failed to create music: " + e.message)
 
@@ -157,7 +158,6 @@ def import_to_appwrite(context, filenames, infos):
                 storage,
                 f"/usr/local/server/musics/{file}.mp3",
             )
-            musics.append(music)
 
             cover = add_file(
                 context,
@@ -170,7 +170,7 @@ def import_to_appwrite(context, filenames, infos):
 
             info = infos[i]
 
-            add_music(context, databases, info[2], info[1], cover, music)
+            musics.append(add_music(context, databases, info[2], info[1], cover, music))
             context.log("info : ")
             context.log(info)
         info = infos[0]
