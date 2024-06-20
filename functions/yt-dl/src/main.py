@@ -103,7 +103,7 @@ def add_playlist(context, databases, name, creator, musics, cover):
         context.log(musics)
         databases.create_document(
             database_id=APPWRITE_DATABASES_ID,
-            collection_id=APPWRITE_MUSIC_COLLECTION_ID,
+            collection_id=APPWRITE_PLAYLIST_COLLECTION_ID,
             document_id=ID.unique(),
             data={
                 "name": name,
