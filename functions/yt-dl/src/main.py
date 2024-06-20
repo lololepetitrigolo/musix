@@ -96,10 +96,10 @@ def add_music(context, databases, title, author, cover, music):
         context.error("Failed to create music: " + e.message)
 
 
-def add_playlist(context, databases, name, creator, musics_id, cover):
+def add_playlist(context, databases, name, creator, musics, cover):
     try:
         context.log("musics_id")
-        context.log(musics_id)
+        context.log(musics)
         databases.create_document(
             database_id=APPWRITE_DATABASES_ID,
             collection_id=APPWRITE_MUSIC_COLLECTION_ID,
@@ -109,7 +109,7 @@ def add_playlist(context, databases, name, creator, musics_id, cover):
                 "title": name,
                 "creator": creator,
                 "cover": get_url(cover),
-                "music": musics_id,
+                "music": musics,
             },
         )
     except Exception as e:
@@ -146,18 +146,18 @@ def import_to_appwrite(context, filenames, infos):
 
         info = infos[0]
 
-        add_music(context, databases, info[2], info[1], music, cover)
+        add_music(context, databases, info[2], info[1], cover, music)
 
     else:
         album_cover = None
-        musics_id = []
+        musics = []
         for i, file in enumerate(filenames):
             music = add_file(
                 context,
                 storage,
                 f"/usr/local/server/musics/{file}.mp3",
             )
-            musics_id.append(music)
+            musics.append(music)
 
             cover = add_file(
                 context,
@@ -170,11 +170,11 @@ def import_to_appwrite(context, filenames, infos):
 
             info = infos[i]
 
-            add_music(context, databases, info[2], info[1], music, cover)
+            add_music(context, databases, info[2], info[1], cover, music)
             context.log("info : ")
             context.log(info)
         info = infos[0]
-        add_playlist(context, databases, info[0], info[1], musics_id, album_cover)
+        add_playlist(context, databases, info[0], info[1], musics, album_cover)
 
 
 def main(context):
