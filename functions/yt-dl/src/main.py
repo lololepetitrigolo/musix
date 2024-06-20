@@ -107,7 +107,6 @@ def add_playlist(context, databases, name, creator, musics, cover):
             document_id=ID.unique(),
             data={
                 "name": name,
-                "title": name,
                 "creator": creator,
                 "cover": get_url(cover),
                 "music": musics,
