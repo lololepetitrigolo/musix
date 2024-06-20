@@ -20,7 +20,7 @@ APPWRITE_BUCKET_ID = "6658a4a8000adeb74291"
 ydl_opts = {
     "format": "bestaudio/best",
     "writethumbnail": True,
-    "outtmpl": "musics/%(title)s___%(uploader)s___%(album)s.%(ext)s",
+    "outtmpl": "musics/%(id)s.%(ext)s",
     "postprocessors": [
         {
             "key": "FFmpegExtractAudio",
@@ -35,9 +35,13 @@ ydl_opts = {
 class FilenameCollectorPP(youtube_dl.postprocessor.common.PostProcessor):
     def __init__(self):
         super(FilenameCollectorPP, self).__init__(None)
+        self.info = []
         self.filenames = []
 
     def run(self, information):
+        self.info.append(
+            [information["title"], information["uploader"], information["album"]]
+        )
         self.filenames.append(information["filepath"][7:-4])
         return [], information
 
@@ -49,20 +53,15 @@ def download(url):
         ydl.add_post_processor(filename_collector)
         ydl.download([url])
 
-    return filename_collector.filenames.copy()
+    return filename_collector.filenames.copy(), filename_collector.info.copy()
 
 
 def add_file(context, storage, filepath):
     try:
-        raw_content = open(rf"{filepath}", "rb")
         result = storage.create_file(
             bucket_id=APPWRITE_BUCKET_ID,
             file_id=ID.unique(),
-            file=InputFile.from_bytes(
-                raw_content,
-                filepath,
-                mime_type="audio/mpeg" if filepath[-1] == "3" else "image/webp",
-            ),
+            file=InputFile.from_path(filepath),
             permissions=['read("any")'],
         )
     except Exception as e:
@@ -112,7 +111,7 @@ def add_playlist(context, databases, name, creator, musics_id, cover):
         return context.response.send("Failed to create playlist")
 
 
-def import_to_appwrite(context, filenames):
+def import_to_appwrite(context, filenames, infos):
     context.log(filenames)
     client = (
         Client()
@@ -140,14 +139,14 @@ def import_to_appwrite(context, filenames):
             f"/usr/local/server/music/{filenames[0]}.webp",
         )
 
-        info = filenames.split(sep="___")
+        info = infos[0]
 
         add_music(context, databases, info[2], info[1], music, cover)
 
     else:
         album_cover = None
         musics_id = []
-        for file in filenames:
+        for i, file in enumerate(filenames):
             music = add_file(
                 context,
                 storage,
@@ -164,7 +163,7 @@ def import_to_appwrite(context, filenames):
             if not album_cover:
                 album_cover = cover
 
-            info = file.split(sep="___")
+            info = info[i]
 
             add_music(context, databases, info[2], info[1], music, cover)
         info = filenames[0].split("|||")
@@ -179,14 +178,14 @@ def main(context):
     context.log(f"url : {url}")
 
     try:
-        filenames = download(url)
+        filenames, infos = download(url)
     except Exception as e:
         context.error("Failed to create document: " + e)
         return context.response.send("Failed to download")
 
     context.log("Download finsh")
 
-    import_to_appwrite(context, filenames)
+    import_to_appwrite(context, filenames, infos)
 
     context.log("Imported to databases")
 
