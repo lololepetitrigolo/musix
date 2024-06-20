@@ -20,7 +20,7 @@ APPWRITE_BUCKET_ID = "6658a4a8000adeb74291"
 ydl_opts = {
     "format": "bestaudio/best",
     "writethumbnail": True,
-    "outtmpl": "musics/%(title)s|||%(uploader)s|||%(album)s.%(ext)s",
+    "outtmpl": "musics/%(title)s___%(uploader)s___%(album)s.%(ext)s",
     "postprocessors": [
         {
             "key": "FFmpegExtractAudio",
@@ -130,7 +130,7 @@ def import_to_appwrite(context, filenames):
             context, storage, f"/usr/local/server/music/{filenames[0]}.webp"
         )
 
-        info = filenames.split(sep="|||")
+        info = filenames.split(sep="___")
 
         add_music(context, databases, info[2], info[1], music, cover)
 
@@ -146,7 +146,7 @@ def import_to_appwrite(context, filenames):
             if not album_cover:
                 album_cover = cover
 
-            info = file.split(sep="|||")
+            info = file.split(sep="___")
 
             add_music(context, databases, info[2], info[1], music, cover)
         info = filenames[0].split("|||")
