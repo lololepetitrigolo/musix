@@ -39,8 +39,13 @@ class FilenameCollectorPP(youtube_dl.postprocessor.common.PostProcessor):
         self.filenames = []
 
     def run(self, information):
+
         self.info.append(
-            [information["title"], information["uploader"], information["album"]]
+            [
+                information["album"],
+                " - ".join(information["artists"]),
+                information["title"],
+            ]
         )
         self.filenames.append(information["filepath"][7:-4])
         return [], information
@@ -71,7 +76,7 @@ def add_file(context, storage, filepath):
 
 
 def get_url(file):
-    return f"https://{APPWRITE_API_ENDPOINT}/storage/buckets/{APPWRITE_BUCKET_ID}/files/{file['$id']}/view?project={APPWRITE_PROJECT_ID}"
+    return f"{APPWRITE_API_ENDPOINT}/storage/buckets/{APPWRITE_BUCKET_ID}/files/{file['$id']}/view?project={APPWRITE_PROJECT_ID}"
 
 
 def add_music(context, databases, title, author, cover, music):
@@ -93,6 +98,8 @@ def add_music(context, databases, title, author, cover, music):
 
 def add_playlist(context, databases, name, creator, musics_id, cover):
     try:
+        context.log("musics_id")
+        context.log(musics_id)
         databases.create_document(
             database_id=APPWRITE_DATABASES_ID,
             collection_id=APPWRITE_MUSIC_COLLECTION_ID,
