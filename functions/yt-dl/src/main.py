@@ -123,8 +123,12 @@ def import_to_appwrite(context, filenames):
         return "Error"
 
     if len(filenames) == 1:
-        music = add_file(context, storage, f"music/{filenames[0]}.mp3")
-        cover = add_file(context, storage, f"music/{filenames[0]}.webp")
+        music = add_file(
+            context, storage, f"/usr/local/server/music/{filenames[0]}.mp3"
+        )
+        cover = add_file(
+            context, storage, f"/usr/local/server/music/{filenames[0]}.webp"
+        )
 
         info = filenames.split(sep="|||")
 
@@ -134,10 +138,10 @@ def import_to_appwrite(context, filenames):
         album_cover = None
         musics_id = []
         for file in filenames:
-            music = add_file(context, storage, f"music/{file}.mp3")
+            music = add_file(context, storage, f"/usr/local/server/music/{file}.mp3")
             musics_id.append(music["$id"])
 
-            cover = add_file(context, storage, f"music/{file}.webp")
+            cover = add_file(context, storage, f"/usr/local/server/music/{file}.webp")
 
             if not album_cover:
                 album_cover = cover
