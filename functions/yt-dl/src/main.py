@@ -164,7 +164,7 @@ def main(context):
 
     context.log("Download finsh")
 
-    import_to_appwrite(filenames)
+    import_to_appwrite(context, filenames)
 
     context.log("Imported to databases")
 
