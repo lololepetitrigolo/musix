@@ -42,7 +42,7 @@ class FilenameCollectorPP(youtube_dl.postprocessor.common.PostProcessor):
         self.info.append(
             [information["title"], information["uploader"], information["album"]]
         )
-        self.filenames.append(information["filepath"][7:-4])
+        self.filenames.append(information["filepath"][::-4])
         return [], information
 
 
@@ -66,13 +66,12 @@ def add_file(context, storage, filepath):
         )
     except Exception as e:
         context.error("Failed to create file: " + e.message)
-        return context.response.send("Failed to create file")
 
     return result
 
 
 def get_url(file):
-    return f"https://server.appwrite/v1/storage/buckets/{APPWRITE_BUCKET_ID}/files/{file['$id']}/view?project={APPWRITE_PROJECT_ID}"
+    return f"https://{APPWRITE_API_ENDPOINT}/storage/buckets/{APPWRITE_BUCKET_ID}/files/{file['$id']}/view?project={APPWRITE_PROJECT_ID}"
 
 
 def add_music(context, databases, title, author, cover, music):
@@ -90,7 +89,6 @@ def add_music(context, databases, title, author, cover, music):
         )
     except Exception as e:
         context.error("Failed to create music: " + e.message)
-        return context.response.send("Failed to create music")
 
 
 def add_playlist(context, databases, name, creator, musics_id, cover):
@@ -101,6 +99,7 @@ def add_playlist(context, databases, name, creator, musics_id, cover):
             document_id=ID.unique(),
             data={
                 "name": name,
+                "title": name,
                 "creator": creator,
                 "cover": get_url(cover),
                 "music": musics_id,
@@ -108,7 +107,6 @@ def add_playlist(context, databases, name, creator, musics_id, cover):
         )
     except Exception as e:
         context.error("Failed to create playlist: " + e.message)
-        return context.response.send("Failed to create playlist")
 
 
 def import_to_appwrite(context, filenames, infos):
@@ -166,10 +164,9 @@ def import_to_appwrite(context, filenames, infos):
             info = infos[i]
 
             add_music(context, databases, info[2], info[1], music, cover)
+            context.log("info : ", info)
         info = infos[0]
         add_playlist(context, databases, info[0], info[1], musics_id, album_cover)
-
-    return context.response.send("Document created")
 
 
 def main(context):
@@ -181,12 +178,9 @@ def main(context):
         filenames, infos = download(url)
     except Exception as e:
         context.error("Failed to create document: " + e)
-        return context.response.send("Failed to download")
 
     context.log("Download finsh")
 
     import_to_appwrite(context, filenames, infos)
 
     context.log("Imported to databases")
-
-    return context.response.send("Sounds add to databases")
