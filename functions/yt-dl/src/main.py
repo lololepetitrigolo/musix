@@ -52,22 +52,17 @@ def download(url):
     return filename_collector.filenames.copy()
 
 
-def sanitize_filename(filename):
-    new_filename = ""
-    for c in filename:
-        if c == " ":
-            new_filename += "\ "
-        else:
-            new_filename += c
-    return str(new_filename)
-
-
 def add_file(context, storage, filepath):
     try:
+        raw_content = open(rf"{filepath}", "rb")
         result = storage.create_file(
             bucket_id=APPWRITE_BUCKET_ID,
             file_id=ID.unique(),
-            file=InputFile.from_path(filepath),
+            file=InputFile.from_bytes(
+                raw_content,
+                filepath,
+                mime_type="audio/mpeg" if filepath[-1] == "3" else "image/webp",
+            ),
             permissions=['read("any")'],
         )
     except Exception as e:
@@ -137,12 +132,12 @@ def import_to_appwrite(context, filenames):
         music = add_file(
             context,
             storage,
-            f"/usr/local/server/music/{sanitize_filename(filenames[0])}.mp3",
+            f"/usr/local/server/music/{filenames[0]}.mp3",
         )
         cover = add_file(
             context,
             storage,
-            f"/usr/local/server/music/{sanitize_filename(filenames[0])}.webp",
+            f"/usr/local/server/music/{filenames[0]}.webp",
         )
 
         info = filenames.split(sep="___")
@@ -156,14 +151,14 @@ def import_to_appwrite(context, filenames):
             music = add_file(
                 context,
                 storage,
-                f"/usr/local/server/music/{sanitize_filename(file)}.mp3",
+                f"/usr/local/server/music/{file}.mp3",
             )
             musics_id.append(music["$id"])
 
             cover = add_file(
                 context,
                 storage,
-                f"/usr/local/server/music/{sanitize_filename(file)}.webp",
+                f"/usr/local/server/music/{file}.webp",
             )
 
             if not album_cover:
