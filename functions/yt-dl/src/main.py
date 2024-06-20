@@ -164,7 +164,8 @@ def import_to_appwrite(context, filenames, infos):
             info = infos[i]
 
             add_music(context, databases, info[2], info[1], music, cover)
-            context.log("info : ", info)
+            context.log("info : ")
+            context.log(info)
         info = infos[0]
         add_playlist(context, databases, info[0], info[1], musics_id, album_cover)
 
