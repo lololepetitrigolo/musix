@@ -52,6 +52,12 @@ def download(url):
     return filename_collector.filenames.copy()
 
 
+def sanitize_filename(filename):
+    new_filename = ""
+    for c in filename:
+        new_filename += "\\" + c
+
+
 def add_file(context, storage, filepath):
     try:
         result = storage.create_file(
@@ -124,10 +130,14 @@ def import_to_appwrite(context, filenames):
 
     if len(filenames) == 1:
         music = add_file(
-            context, storage, f"/usr/local/server/music/{filenames[0]}.mp3"
+            context,
+            storage,
+            f"/usr/local/server/music/{sanitize_filename(filenames[0])}.mp3",
         )
         cover = add_file(
-            context, storage, f"/usr/local/server/music/{filenames[0]}.webp"
+            context,
+            storage,
+            f"/usr/local/server/music/{sanitize_filename(filenames[0])}.webp",
         )
 
         info = filenames.split(sep="___")
@@ -138,10 +148,18 @@ def import_to_appwrite(context, filenames):
         album_cover = None
         musics_id = []
         for file in filenames:
-            music = add_file(context, storage, f"/usr/local/server/music/{file}.mp3")
+            music = add_file(
+                context,
+                storage,
+                f"/usr/local/server/music/{sanitize_filename(file)}.mp3",
+            )
             musics_id.append(music["$id"])
 
-            cover = add_file(context, storage, f"/usr/local/server/music/{file}.webp")
+            cover = add_file(
+                context,
+                storage,
+                f"/usr/local/server/music/{sanitize_filename(file)}.webp",
+            )
 
             if not album_cover:
                 album_cover = cover
