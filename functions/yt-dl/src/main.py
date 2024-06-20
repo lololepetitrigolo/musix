@@ -76,7 +76,7 @@ def add_file(context, storage, filepath):
 
 
 def get_url(file):
-    return f"{APPWRITE_API_ENDPOINT}/storage/buckets/{APPWRITE_BUCKET_ID}/files/{file['$id']}/view?project={APPWRITE_PROJECT_ID}"
+    return f"http://192.168.1.168/storage/buckets/{APPWRITE_BUCKET_ID}/files/{file['$id']}/view?project={APPWRITE_PROJECT_ID}"
 
 
 def add_music(context, databases, title, author, cover, music):
