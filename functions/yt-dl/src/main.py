@@ -131,12 +131,12 @@ def import_to_appwrite(context, filenames, infos):
         music = add_file(
             context,
             storage,
-            f"/usr/local/server/music/{filenames[0]}.mp3",
+            f"/usr/local/server/musics/{filenames[0]}.mp3",
         )
         cover = add_file(
             context,
             storage,
-            f"/usr/local/server/music/{filenames[0]}.webp",
+            f"/usr/local/server/musics/{filenames[0]}.webp",
         )
 
         info = infos[0]
@@ -150,14 +150,14 @@ def import_to_appwrite(context, filenames, infos):
             music = add_file(
                 context,
                 storage,
-                f"/usr/local/server/music/{file}.mp3",
+                f"/usr/local/server/musics/{file}.mp3",
             )
             musics_id.append(music["$id"])
 
             cover = add_file(
                 context,
                 storage,
-                f"/usr/local/server/music/{file}.webp",
+                f"/usr/local/server/musics/{file}.webp",
             )
 
             if not album_cover:
@@ -166,7 +166,7 @@ def import_to_appwrite(context, filenames, infos):
             info = info[i]
 
             add_music(context, databases, info[2], info[1], music, cover)
-        info = filenames[0].split("|||")
+        info = infos[0]
         add_playlist(context, databases, info[0], info[1], musics_id, album_cover)
 
     return context.response.send("Document created")
