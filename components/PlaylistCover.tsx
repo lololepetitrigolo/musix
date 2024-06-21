@@ -18,10 +18,16 @@ const PlaylistCover: React.FC<PlaylistInfo> = (playlistInfo) => {
       }}
     >
       <Image source={{ uri: playlistInfo.cover }} className="h-32 w-32" />
-      <Text className="mt-auto mb-auto ml-2 w-full text-white font-semibold overflow-hidden whitespace-nowrap">
+      <Text
+        numberOfLines={2}
+        className="mt-auto mb-auto ml-2 w-full text-white font-semibold overflow-hidden whitespace-nowrap"
+      >
         {playlistInfo.title}
       </Text>
-      <Text className="mt-auto mb-auto ml-2 w-ful text-slate-300 font-light overflow-hidden whitespace-nowrap">
+      <Text
+        numberOfLines={2}
+        className="mt-auto mb-auto ml-2 w-ful text-slate-300 font-light overflow-hidden whitespace-nowrap"
+      >
         {playlistInfo.creator}
       </Text>
     </TouchableOpacity>

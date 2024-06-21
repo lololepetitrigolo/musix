@@ -40,9 +40,17 @@ class FilenameCollectorPP(youtube_dl.postprocessor.common.PostProcessor):
 
     def run(self, information):
 
+        try:
+            name = information["playlist_title"]
+        except:
+            try:
+                name = information["album"]
+            except:
+                name = ""
+
         self.info.append(
             [
-                information["album"],
+                name,
                 " - ".join(information["artists"]),
                 information["title"],
             ]
