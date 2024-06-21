@@ -17,10 +17,10 @@ const BigCover: React.FC<SoundInfo> = ({ cover, title, author, music, id }) => {
       }}
     >
       <Image source={{ uri: cover }} className="h-32 w-32" />
-      <Text className="mt-auto mb-auto ml-2 w-full text-white font-semibold overflow-hidden whitespace-nowrap">
+      <Text className="w-full text-white font-semibold overflow-hidden whitespace-nowrap">
         {title}
       </Text>
-      <Text className="mt-auto mb-auto ml-2 w-ful text-slate-300 font-light overflow-hidden whitespace-nowrap">
+      <Text className="w-ful text-slate-300 font-light overflow-hidden whitespace-nowrap">
         {author}
       </Text>
     </TouchableOpacity>

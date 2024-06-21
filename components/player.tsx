@@ -5,6 +5,7 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { router } from "expo-router";
 import { Slider } from "@miblanchard/react-native-slider";
 import { useState } from "react";
+import { vw } from "react-native-expo-viewport-units";
 
 const Player = () => {
   const {
@@ -34,15 +35,24 @@ const Player = () => {
             }}
             className="w-12 h-12 m-2"
           ></Image>
-          <View className="flex flex-row mt-auto mb-auto p-2">
-            <Text className="text-slate-200 text-lg mt-auto">
+          <View
+            className="flex flex-row mt-auto mb-auto p-2 overflow-hidden"
+            style={{ width: vw(70) }}
+          >
+            <Text
+              numberOfLines={1}
+              className="text-slate-200 text-lg mt-auto overflow-hidden text-ellipsis whitespace-nowrap"
+            >
               {
                 soundTrack.current.sounds[soundTrack.current.currentSoundindex]
                   ?.title
               }{" "}
               •{" "}
             </Text>
-            <Text className="text-slate-300 text-lg font-light mt-auto">
+            <Text
+              numberOfLines={1}
+              className="text-slate-300 text-lg font-light mt-auto overflow-hidden text-ellipsis whitespace-nowrap"
+            >
               {
                 soundTrack.current.sounds[soundTrack.current.currentSoundindex]
                   ?.author
@@ -54,7 +64,7 @@ const Player = () => {
           <Image
             source={isPlaying ? icons.pause : icons.play}
             resizeMode="contain"
-            className="w-6 h-6 mt-auto mb-auto mr-2"
+            className="w-6 h-6 mt-auto mb-auto mr-2 ml-4"
             tintColor={"#FFFFFF"}
           ></Image>
         </TouchableOpacity>

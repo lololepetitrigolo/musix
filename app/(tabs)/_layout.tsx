@@ -12,6 +12,7 @@ import Player from "@/components/player";
 import { StatusBar } from "expo-status-bar";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { startDownload } from "@/lib/appwrite";
 
 interface Props {
   icon: ImageSourcePropType;
@@ -53,7 +54,7 @@ const TabIcon: React.FC<Props> = ({
 };
 
 const TabLayout = () => {
-  const { user, sound } = useGlobalContext();
+  const { user, sound, downloadUrl } = useGlobalContext();
 
   const pathname: string = usePathname().split("/")[1];
 
@@ -85,21 +86,27 @@ const TabLayout = () => {
           <Text className="text-white mt-auto mb-auto text-3xl font-bold">
             {headerText}
           </Text>
-          <TouchableOpacity
-            className="ml-auto mt-auto mb-auto mr-2"
-            onPress={() => {}}
-          >
-            <Image
-              className="w-8 h-8"
-              tintColor={"#f1f5f9"}
-              source={icons.downloads}
-            />
-          </TouchableOpacity>
+          {pathname == "youtube" ? (
+            <TouchableOpacity
+              className="ml-auto mt-auto mb-auto mr-2"
+              onPress={() => {
+                startDownload(downloadUrl.current);
+              }}
+            >
+              <Image
+                className="w-8 h-8"
+                tintColor={"#f1f5f9"}
+                source={icons.downloads}
+              />
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
       <Slot />
       <View className="mt-auto">
-        <View className="mb-1">{sound ? <Player /> : null}</View>
+        <View className="mb-1">
+          {sound && pathname != "youtube" ? <Player /> : null}
+        </View>
         <View className="flex-row justify-around bg-slate-800 h-20 p-2">
           <TabIcon
             icon={icons.home}

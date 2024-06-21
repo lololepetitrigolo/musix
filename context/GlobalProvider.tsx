@@ -45,6 +45,7 @@ export interface GlobalContextType {
   setUser: React.Dispatch<React.SetStateAction<Models.Document | undefined>>;
   nextTrack: () => void;
   previousTrack: () => void;
+  downloadUrl: React.MutableRefObject<string>;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -65,6 +66,7 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
   const [globalSound, setGlobalSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playingTime, setPlayingTime] = useState(0);
+  const downloadUrl = useRef("");
   const shouldUpdatePlayingTime = useRef(1);
   const soundTrack = useRef<{
     currentSoundindex: number;
@@ -242,6 +244,7 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
         setUser,
         nextTrack,
         previousTrack,
+        downloadUrl,
       }}
     >
       {children}

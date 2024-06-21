@@ -4,6 +4,8 @@ import {
   Avatars,
   Client,
   Databases,
+  ExecutionMethod,
+  Functions,
   ID,
   Models,
   Query,
@@ -19,6 +21,7 @@ export const appwriteConfig = {
   userCollectionId: "6658a0a80013e2717401",
   musicCollectionId: "6658a0c700292cade378",
   playlistCollectionId: "665b54640037f32cf7b7",
+  ytdlFunctionId: "66700a5a002e7e486478",
 };
 
 const client = new Client();
@@ -32,6 +35,7 @@ const account = new Account(client);
 const storage = new Storage(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
+const functions = new Functions(client);
 
 // Register user
 export async function createUser(
@@ -332,6 +336,23 @@ export async function getPlaylist(ids: string[]) {
     }
 
     return playlists;
+  } catch (error) {
+    console.log(error);
+    throw new Error("error while fetching playlist");
+  }
+}
+
+export async function startDownload(url: string) {
+  try {
+    const result = await functions.createExecution(
+      appwriteConfig.ytdlFunctionId,
+      url,
+      true,
+      "/",
+      ExecutionMethod.GET,
+      {}
+    );
+    return result;
   } catch (error) {
     console.log(error);
     throw new Error("error while fetching playlist");
