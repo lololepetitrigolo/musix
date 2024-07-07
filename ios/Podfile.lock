@@ -15,7 +15,7 @@ PODS:
     - ExpoModulesCore
   - ExpoAsset (10.0.6):
     - ExpoModulesCore
-  - ExpoFileSystem (17.0.1):
+  - ExpoFileSystem (16.0.8):
     - ExpoModulesCore
   - ExpoFont (12.0.5):
     - ExpoModulesCore
@@ -50,7 +50,7 @@ PODS:
     - ExpoModulesCore
   - ExpoWebBrowser (13.0.3):
     - ExpoModulesCore
-  - EXSplashScreen (0.27.4):
+  - EXSplashScreen (0.27.5):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -1622,14 +1622,14 @@ SPEC CHECKSUMS:
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
   Expo: c99f14ca53381d5399b88684c88e20ff7928d3c7
   ExpoAsset: 9b7433ecc5f1b608ccbb823492e062bde944abd2
-  ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
+  ExpoFileSystem: eecaf6796aed0f4dd20042dc2ca2cac6c4bc1185
   ExpoFont: 690b76008be824e47907f200cb0764870108dfd1
   ExpoHead: 28ccee5977648d15f6a62b9a680a4bd169a1515b
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoModulesCore: 4eb2165cde325c8c121d495bb8beb0da9b30c92e
   ExpoSystemUI: b5ecc4b6781b6369fb8b3a0903bea36fae3dd090
   ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e
-  EXSplashScreen: d439ca817211886dc80a00f3761e3b6d861d7205
+  EXSplashScreen: fbf0ec78e9cee911df188bf17b4fe51d15a84b87
   EXStructuredHeaders: cb8d1f698e144f4c5547b4c4963e1552f5d2b457
   EXUpdates: daf96ee6568c68e17e0bbfb635d43cdc6588ed91
   EXUpdatesInterface: 996527fd7d1a5d271eb523258d603f8f92038f24
