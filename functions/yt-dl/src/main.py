@@ -125,7 +125,7 @@ def add_playlist(context, databases, name, creator, musics, cover):
                 "name": name,
                 "creator": creator,
                 "cover": get_url(cover),
-                "music": musics,
+                "musics": musics,
             },
         )
     except Exception as e:
