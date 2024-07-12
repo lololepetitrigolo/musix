@@ -47,6 +47,8 @@ class FilenameCollectorPP(youtube_dl.postprocessor.common.PostProcessor):
         except:
             try:
                 name = information["album"]
+                if "Album - " in name:
+                    name = name[8::]
             except:
                 name = ""
 
