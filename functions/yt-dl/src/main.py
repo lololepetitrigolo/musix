@@ -9,6 +9,8 @@ from appwrite.input_file import InputFile
 
 import os
 
+from PIL import Image
+
 
 APPWRITE_API_ENDPOINT = "http://10.153.41.182:35080/v1"
 APPWRITE_PROJECT_ID = "6660984e000818458191"
@@ -75,6 +77,18 @@ def download(url):
         ydl.download([url])
 
     return filename_collector.filenames.copy(), filename_collector.info.copy()
+
+
+def resize_thumbnails(path):
+    img = Image.open(path)
+
+    new_width = img.height
+    center = img.width / 2
+    left = center - (new_width / 2)
+    right = center + (new_width / 2)
+    img_res = img.crop((int(left), 0, int(right), 0))
+
+    img_res.save(path)
 
 
 def add_file(context, storage, filepath):
@@ -203,6 +217,11 @@ def main(context):
         context.error("Failed to create document: " + e)
 
     context.log("Download finsh")
+
+    for file in filenames:
+        resize_thumbnails(f"/usr/local/server/musics/{file}.mp3")
+
+    context.log("Thumbnails resized")
 
     import_to_appwrite(context, filenames, infos)
 
