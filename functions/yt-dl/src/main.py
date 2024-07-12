@@ -219,7 +219,7 @@ def main(context):
     context.log("Download finsh")
 
     for file in filenames:
-        resize_thumbnails(f"/usr/local/server/musics/{file}.mp3")
+        resize_thumbnails(f"/usr/local/server/musics/{file}.webp")
 
     context.log("Thumbnails resized")
 
