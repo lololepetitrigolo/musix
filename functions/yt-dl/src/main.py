@@ -86,7 +86,7 @@ def resize_thumbnails(path):
     center = img.width / 2
     left = center - (new_width / 2)
     right = center + (new_width / 2)
-    img_res = img.crop((int(left), 0, int(right), 0))
+    img_res = img.crop((int(left), 0, int(right), img.height))
 
     img_res.save(path)
 
