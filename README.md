@@ -4,7 +4,7 @@ Une application qui ressemble à Spotify.
 
 ## Vidéo de démonstartion
 
-<video controls src="Video-demo.mp4" title="Title"></video>
+https://github.com/user-attachments/assets/25bfe1e3-9c8d-4552-a94c-4e6859ebdea3
 
 ## Technologie
 
